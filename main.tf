@@ -171,9 +171,9 @@ resource "azurerm_linux_virtual_machine" "mycloudmorevm" {
     }
 
     computer_name  = "Cloudmore"
-    admin_username = "pavel"
+    admin_username = "admin"
     disable_password_authentication = false
-    admin_password = "Huj123"
+    admin_password = "admin123"
 
 
     tags = {
