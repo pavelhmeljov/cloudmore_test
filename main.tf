@@ -171,9 +171,9 @@ resource "azurerm_linux_virtual_machine" "mycloudmorevm" {
     }
 
     computer_name  = "Cloudmore"
-    admin_username = "admin"
+    admin_username = "pavel"
     disable_password_authentication = false
-    admin_password = "admin123"
+    admin_password = "Pavel123"
 
 
     tags = {
@@ -186,7 +186,7 @@ resource "azurerm_linux_virtual_machine" "mycloudmorevm" {
     agent = false
     type = "ssh"
     user = "pavel"
-    password = "Huj123"
+    password = "Pavel123"
 
     }
 
@@ -194,12 +194,12 @@ resource "azurerm_linux_virtual_machine" "mycloudmorevm" {
     inline = [
     "sudo apt update && sudo apt upgrade -y && sudo apt install docker* -y",
     "sudo docker pull prom/prometheus && sudo docker pull grafana/grafana",
-    "sudo wget https://github.com/pavelhmeljov/cloudmore_test/blob/main/prometheus.yml -P /tmp",
+    "sudo wget https://raw.githubusercontent.com/pavelhmeljov/cloudmore_test/main/prometheus.yml -P /tmp",
     "sudo docker network create --subnet=10.0.0.0/24 cm-network",
-    "sudo docker run --net cm-network --ip 10.0.0.2 -d -p 3000:3000 grafana/grafana",
-    "sudo docker run -d --restart on-failure --name=openweather1 --net cm-network --ip 10.0.0.4 -p 9091:9091 billykwooten/openweather-exporter --city "Tallinn,ee" --apikey 6292224fd54adad35dbdae3a14e19b91",
-    "sudo docker run -v /tmp/prometheus.yml:/etc/prometheus/prometheus.yml --net cm-network --ip 10.0.0.3 -d -p 9090:9090 prom/prometheus"
-
+    "sudo mkdir -p /root/grafana/provisioning/datasources/ && wget https://raw.githubusercontent.com/pavelhmeljov/cloudmore_test/main/datasource.yml -P /root/grafana/provisioning/datasources/",
+    "sudo docker run --name grafana4ka -v /root/grafana/provisioning/datasources/:/etc/grafana/provisioning/datasources/ --net cm-network --ip 10.0.0.2 -d -p 3000:3000 grafana/grafana",
+    "sudo docker run -v /tmp/prometheus.yml:/etc/prometheus/prometheus.yml --net cm-network --ip 10.0.0.3 -d -p 9090:9090 prom/prometheus",
+    "sudo docker run -d --name=openweather1 --net cm-network --ip 10.0.0.4 -p 9091:9091 billykwooten/openweather-exporter --city Tallinn --apikey 6292224fd54adad35dbdae3a14e19b91"
     ]
 
 
