@@ -1,1 +1,7 @@
-# cloudmore_test
+## Test task for Cloudmore
+
+
+....
+
+
+There comes readme
