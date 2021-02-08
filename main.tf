@@ -196,12 +196,12 @@ resource "azurerm_linux_virtual_machine" "mycloudmorevm" {
     "sudo docker pull prom/prometheus && sudo docker pull grafana/grafana",
     "sudo wget https://raw.githubusercontent.com/pavelhmeljov/cloudmore_test/main/prometheus.yml -P /tmp",
     "sudo docker network create --subnet=10.0.0.0/24 cm-network",
-    "sudo mkdir -p /root/grafana/provisioning/datasources/ && sudo wget https://raw.githubusercontent.com/pavelhmeljov/cloudmore_test/main/datasource.yml -P /root/grafana/provisioning/datasources/",
-    "sudo mkdir -p /root/grafana/provisioning/dashboards/ && sudo wget https://raw.githubusercontent.com/pavelhmeljov/cloudmore_test/main/pogoda.json -P /root/grafana/provisioning/dashboards/",
-    "sudo wget https://raw.githubusercontent.com/pavelhmeljov/cloudmore_test/main/dash.yml -P /root/grafana/provisioning/dashboards/"
+    "sudo mkdir -p /tmp/datasources/ && sudo wget https://raw.githubusercontent.com/pavelhmeljov/cloudmore_test/main/datasource.yml -P /tmp/datasources/",
+    "sudo mkdir -p /tmp/dashboards/ && sudo wget https://raw.githubusercontent.com/pavelhmeljov/cloudmore_test/main/pogoda.json -P /tmp/dashboards/",
+    "sudo wget https://raw.githubusercontent.com/pavelhmeljov/cloudmore_test/main/dash.yml -P /tmp/dashboards/"
     "sudo docker run -v /tmp/prometheus.yml:/etc/prometheus/prometheus.yml --net cm-network --ip 10.0.0.3 -d -p 9090:9090 prom/prometheus",
     "sudo docker run -d --name=openweather1 --net cm-network --ip 10.0.0.4 -p 9091:9091 billykwooten/openweather-exporter --city Tallinn --apikey 6292224fd54adad35dbdae3a14e19b91",
-    "sudo docker run --name grafana4ka -v /root/grafana/provisioning/datasources/:/etc/grafana/provisioning/datasources/ -v /root/grafana/provisioning/dashboards/:/etc/grafana/provisioning/dashboards/  --net cm-network --ip 10.0.0.2 -d -p 3000:3000 grafana/grafana"
+    "sudo docker run --name grafana4ka -v /tmp/datasources/:/etc/grafana/provisioning/datasources/ -v /tmp/dashboards/:/etc/grafana/provisioning/dashboards/  --net cm-network --ip 10.0.0.2 -d -p 3000:3000 grafana/grafana"
     ]
 
 
