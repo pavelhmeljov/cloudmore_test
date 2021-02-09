@@ -6,8 +6,8 @@ provider "azurerm" {
 }
 
 # Create a resource group if it doesn't exist
-resource "azurerm_resource_group" "mycloudmoregroup" {
-    name     = "myResourceGroup"
+resource "azurerm_resource_group" "weathegroup" {
+    name     = "ResourceGroup"
     location = "Norway East"
 
     tags = {
@@ -20,7 +20,7 @@ resource "azurerm_virtual_network" "mycloudmorenetwork" {
     name                = "myVnet"
     address_space       = ["10.0.0.0/16"]
     location            = "Norway East"
-    resource_group_name = azurerm_resource_group.mycloudmoregroup.name
+    resource_group_name = azurerm_resource_group.weathegroup.name
 
     tags = {
         environment = "cloudmore Demo"
@@ -30,7 +30,7 @@ resource "azurerm_virtual_network" "mycloudmorenetwork" {
 # Create subnet
 resource "azurerm_subnet" "mycloudmoresubnet" {
     name                 = "mySubnet"
-    resource_group_name  = azurerm_resource_group.mycloudmoregroup.name
+    resource_group_name  = azurerm_resource_group.weathegroup.name
     virtual_network_name = azurerm_virtual_network.mycloudmorenetwork.name
     address_prefixes       = ["10.0.1.0/24"]
 }
@@ -39,7 +39,7 @@ resource "azurerm_subnet" "mycloudmoresubnet" {
 resource "azurerm_public_ip" "mycloudmorepublicip" {
     name                         = "myPublicIP"
     location                     = "Norway East"
-    resource_group_name          = azurerm_resource_group.mycloudmoregroup.name
+    resource_group_name          = azurerm_resource_group.weathegroup.name
     allocation_method            = "Static"
 
     tags = {
@@ -51,7 +51,7 @@ resource "azurerm_public_ip" "mycloudmorepublicip" {
 resource "azurerm_network_security_group" "mycloudmorensg" {
     name                = "myNetworkSecurityGroup"
     location            = "Norway East"
-    resource_group_name = azurerm_resource_group.mycloudmoregroup.name
+    resource_group_name = azurerm_resource_group.weathegroup.name
 
     security_rule {
         name                       = "SSH"
@@ -99,7 +99,7 @@ resource "azurerm_network_security_group" "mycloudmorensg" {
 resource "azurerm_network_interface" "mycloudmorenic" {
     name                      = "myNIC"
     location                  = "Norway East"
-    resource_group_name       = azurerm_resource_group.mycloudmoregroup.name
+    resource_group_name       = azurerm_resource_group.weathegroup.name
 
     ip_configuration {
         name                          = "myNicConfiguration"
@@ -123,7 +123,7 @@ resource "azurerm_network_interface_security_group_association" "example" {
 resource "random_id" "randomId" {
     keepers = {
         # Generate a new ID only when a new resource group is defined
-        resource_group = azurerm_resource_group.mycloudmoregroup.name
+        resource_group = azurerm_resource_group.weathegroup.name
     }
 
     byte_length = 8
@@ -132,7 +132,7 @@ resource "random_id" "randomId" {
 # Create storage account for boot diagnostics
 resource "azurerm_storage_account" "mystorageaccount" {
     name                        = "diag${random_id.randomId.hex}"
-    resource_group_name         = azurerm_resource_group.mycloudmoregroup.name
+    resource_group_name         = azurerm_resource_group.weathegroup.name
     location                    = "Norway East"
     account_tier                = "Standard"
     account_replication_type    = "LRS"
@@ -153,7 +153,7 @@ output "tls_private_key" { value = tls_private_key.example_ssh.private_key_pem }
 resource "azurerm_linux_virtual_machine" "mycloudmorevm" {
     name                  = "Cloudmore"
     location              = "Norway East"
-    resource_group_name   = azurerm_resource_group.mycloudmoregroup.name
+    resource_group_name   = azurerm_resource_group.weathegroup.name
     network_interface_ids = [azurerm_network_interface.mycloudmorenic.id]
     size                  = "Standard_DS1_v2"
 
