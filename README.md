@@ -12,7 +12,7 @@ terraform apply -auto-approve
 
 Then check Public IP from Azure web. You can try az command also:
 
-azure % az vm show --resource-group ResourceGroup --name Cloudmore -d --query myPublicIP -o tsv
+az vm show --resource-group ResourceGroup --name Cloudmore -d --query myPublicIP -o tsv
 
 Open Grafana from web browser:
 
